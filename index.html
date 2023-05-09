@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Dragon Conqueror</title>
+    <link rel="shortcut icon" href="logo.png" type="image/x-icon">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.3/dist/css/bootstrap.min.css" integrity="sha384-rbsA2VBKQhggwzxH7pPCaAqO46MgnOM80zW1RWuH61DGLwZJEdK2Kadq2F9CUG65" crossorigin="anonymous">
+   
+    <script src="https://unpkg.com/vue@next"></script>
+   
+    <link rel="stylesheet" href=".//css/app.css">
+</head>
+<body>
+    <div class="wrapper">
+        <header>
+            <h2>Dragon Conqueror</h2>
+        </header>
+    </div><br><br>
+    <div id="game">
+        <div class="container">
+            <div class="row">
+                <div class="col">
+                    <div class="health">
+                        <div class="health-bar" :style="warriorHealthBar">
+                            <span class="hp-percent">100 %</span>
+                        </div>
+                    </div>
+                    <p class="text-center">Warrior</p>
+                    <div class="img-container">
+                        <img src="gifs/warrior1.gif" alt="Warrior">
+                    </div>
+                </div>
+                <div class="col">
+                    <div class="health">
+                        <div class="health-bar" :style="dragonHealthBar">
+                            <span class="hp-percent">100 %</span>
+                        </div>
+                    </div>
+                    <p class="text-center">Dragon</p>
+                    <div class="img-container">
+                        <img src="gifs/dragon1.gif" alt="dragon">
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="controls">
+                    <button class="control-icon attack"  onclick="new Audio('sounds/sword_slash.mp3').play()" @click="attackDragon">
+                        <img src="img/attack_icon.svg" alt="attack">
+                    </button>
+                    <button class="control-icon " onclick="new Audio('sounds/special_attack.mp3').play()" @click="specialAttack" :disabled="numOfSpecialAttack === 0">
+                        <img src="img/special_attack.svg" alt="special_attack">
+                        <span class="num-of-attempt"></span>
+                    </button>
+                    <button class="control-icon" onclick="new Audio('sounds/heal_effect.mp3').play()" @click="heal" :disable="numOfHeal === 0">
+                     
+                        <img src="img/heal_icon.png" alt="heal">
+                        <span class="num-of-attempt"></span>
+                    </button>
+                    <button class="control-icon"  @click="forfeit">
+                        <img src="img/surrender_icon.png" alt="give-up">
+                    </button>
+                </div>
+            </div>
+            <br><br><br>
+            <div class="row mt-5">
+                <div class="container">
+                    <h4 class="text-center">BattleLogs</h4><br><br>
+                    <ul class="col-md-5 logs">
+                        <li v-for="logMessage in battleLogMessages" :key="log" class="text-center">
+                            <span :class="{'warrior': logMessage.attacker === 'warrior',
+                             'dragon' : logMessage.attacker === 'dragon'}">
+                             <img src="gifs/warrior1.gif" alt="warrior" v-if="logMessage.attacker === 'warrior'" class="img-icon">
+                            <img src="gifs/dragon1.gif" alt="dragon" v-else class="img-icon">
+                            </span>
+                            <span v-if="logMessage.actionType === 'heal'">
+                                heals himself for <span class="log-heal">{{ logMessage.actionValue }} </span>of damage
+                            </span><br>
+                            <span v-else-if="logMessage.actionType === 'special-attack'">
+                                use special attack and deals <span class="log-damage">{{ logMessage.actionValue }} </span>of damage
+                            </span>
+                    </ul>
+                </div>
+            </div>
+        </div>
+        <div onclick="myfunction()" id="fun" class="overlap" v-if="winner">
+            <div class="winner">
+                <div class="text-center">
+                    <h3>Game Over!!!📛🙅‍♀️</h3>
+                    <h4 v-if="winner === 'dragon'">You lose!🤐😡😡</h4>
+                    <h4 v-else-if="winner === 'warrior'">You win!😁😁😏</h4>
+                    <h4 v-else-if="winner === 'draw'">It's draw🙅🙅</h4>
+                    <button onclick="new Audio('sounds/dragon_breath.mp3').play()"  class="btn start-btn mt-4" @click="startFight">Battle Again</button>
+                </div>
+            </div>
+        </div>
+    </div><br><br>
+    <footer class="center">
+        <a href="https://github.com/Cyiza06"> copyright &circleddash; 2023 DopeCode🫅🫅</a>
+    </footer>
+    
+    <script src="js/main.js"></script>
+</body>
+</html>
